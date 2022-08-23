@@ -1,25 +1,38 @@
 import './css/styles.css';
 
 import { allCountries } from './fetchCountries';
-const debounce = require('lodash.debounce');
-
+import debounce from 'lodash.debounce';
+// import Notiflix from 'notiflix';
 
 const DEBOUNCE_DELAY = 300;
 
 const countryInfoEl = document.querySelector('.country-info');
 const countryListEl = document.querySelector('.country-list');
 const inputEl = document.querySelector('#search-box');
-inputEl.addEventListener('input', _.debounce(star, DEBOUNCE_DELAY));
+inputEl.addEventListener('input', debounce(star, DEBOUNCE_DELAY));
 
 let markup = '';
 
+const promise = new Promise((checkLength, reject) => {
+  star;
+});
+
 function star(event) {
-    console.log(event.currentTarget.value);
-    allCountries(event.currentTarget.value);
-    
+  console.log(event.target.value);
+  allCountries(event.target.value)
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      return data;
+    })
+    .catch(error => {
+      console.log(error);
+    });
 }
 
-console.log(`jhlkjb`)
+console.log(`jhlkjb`);
 
 // console.log(allCountries('peru'));
 
@@ -75,8 +88,6 @@ function markupCards(allCountries) {
 //         // Error handling
 //       });;
 // };
-
-
 
 // const allCountries = fetch('https://restcountries.com/v3.1/name/peru')
 //   .then(response => {
