@@ -81,34 +81,3 @@ function markupCards(countries) {
   countryListEl.innerHTML = ' ';
   countryListEl.insertAdjacentHTML('beforeend', `${markup}`);
 }
-
-// function fetchCountries(name) {
-//     return fetch('https://restcountries.com/v3.1/name/peru')
-//       .then(response => {
-//         if (!response.ok) {
-//           throw new Error(response.status);
-//         }
-//         return response.json();
-//       })
-//       .then(data => {
-//         // Data handling
-//       })
-//       .catch(error => {
-//         // Error handling
-//       });;
-// };
-
-// const allCountries = fetch('https://restcountries.com/v3.1/name/peru')
-//   .then(response => {
-//     console.log(response);
-//     return response.json();
-//   })
-//   .then(data => {
-//     console.log(data);
-
-//     checkLength(data);
-//     return data;
-//   })
-//   .catch(error => {
-//     console.log(error);
-//   });
