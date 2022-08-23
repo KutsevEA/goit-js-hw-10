@@ -2,7 +2,7 @@ import './css/styles.css';
 
 import { allCountries } from './fetchCountries';
 import debounce from 'lodash.debounce';
-// import Notiflix from 'notiflix';
+import Notiflix from 'notiflix';
 
 const DEBOUNCE_DELAY = 300;
 
@@ -13,39 +13,47 @@ inputEl.addEventListener('input', debounce(star, DEBOUNCE_DELAY));
 
 let markup = '';
 
-const promise = new Promise((checkLength, reject) => {
-  star;
-});
-
 function star(event) {
-  console.log(event.target.value);
-  allCountries(event.target.value)
+  const userChoiceValue = event.target.value.trim().toLowerCase();
+
+  if (!userChoiceValue || userChoiceValue === ` `) {
+    countryInfoEl.innerHTML = ' ';
+    countryListEl.innerHTML = ' ';
+  }
+
+  allCountries(userChoiceValue)
     .then(response => {
       return response.json();
     })
     .then(data => {
-      console.log(data);
-      return data;
+      if (data.status === 404) {
+        Notiflix.Notify.failure(`Oops, there is no country with that name`);
+      }
+
+      checkLength(data);
     })
     .catch(error => {
-      console.log(error);
+      Notiflix.Notify.failure(error);
     });
 }
 
-console.log(`jhlkjb`);
+function checkLength(countries) {
+  if (countries.length > 10) {
+    Notiflix.Notify.warning(
+      'Too many matches found. Please enter a more specific name.'
+    );
+    return;
+  }
 
-// console.log(allCountries('peru'));
-
-function checkLength(allCountries) {
-  if (allCountries.length === 1) {
-    markupCard(allCountries);
+  if (countries.length === 1) {
+    markupCard(countries);
   } else {
-    markupCards(allCountries);
+    markupCards(countries);
   }
 }
 
-function markupCard(allCountries) {
-  const [country] = allCountries;
+function markupCard(countries) {
+  const [country] = countries;
   markup = `
     <img src="${country.flags.svg}" alt="Flag" width="150" height="150">
     <h1>${country.name.official}</h1>
@@ -58,8 +66,9 @@ function markupCard(allCountries) {
   countryInfoEl.insertAdjacentHTML('beforeend', `${markup}`);
 }
 
-function markupCards(allCountries) {
-  for (const country of allCountries) {
+function markupCards(countries) {
+  markup = ' ';
+  for (const country of countries) {
     markup += `
   <li style="display: flex ; align-items: center"> 
     <img src="${country.flags.svg}" style="margin-right: 15px" alt="Flag" width="25" height="25">
