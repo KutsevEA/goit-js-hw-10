@@ -19,6 +19,7 @@ function star(event) {
   if (!userChoiceValue || userChoiceValue === ` `) {
     countryInfoEl.innerHTML = ' ';
     countryListEl.innerHTML = ' ';
+    return;
   }
 
   allCountries(userChoiceValue)
@@ -28,12 +29,15 @@ function star(event) {
     .then(data => {
       if (data.status === 404) {
         Notiflix.Notify.failure(`Oops, there is no country with that name`);
+        return;
       }
 
       checkLength(data);
     })
     .catch(error => {
       Notiflix.Notify.failure(error);
+      countryInfoEl.innerHTML = ' ';
+      countryListEl.innerHTML = ' ';
     });
 }
 
